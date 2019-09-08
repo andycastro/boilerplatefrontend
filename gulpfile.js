@@ -5,6 +5,7 @@ const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const htmlmin = require('gulp-htmlmin');
 const image = require('gulp-image');
+const browserSync = require('browser-sync').create();
 const files = {
     sassFile: './build/sass/*.scss',    //start source files bellow
     jsToBuild:'./build/js/*.js',        
@@ -16,6 +17,21 @@ const files = {
     distToDistJs: './dist/js',          
     distPath: './dist/',                
     distToDistImg: './dist/img/'
+}
+// BrowserSync
+function taskBrowserSync(done) {
+    browserSync.init({
+        server: {
+        baseDir: "./dist/"
+        },
+        port: 3000
+    });
+    done();
+}
+// BrowserSync Reload
+function taskReload(done) {
+    browserSync.reload();
+    done();
 }
 //task build sass to css
 function sassTask(){
@@ -54,10 +70,10 @@ function imagesTask(){
 //task watching files change
 function watchTask(){
     watch([files.sassFile, files.jsToBuild, files.buildPathHtml, files.imgToMinify],
-        series(sassTask, cssTask, jsTask, htmlTask, imagesTask));
+        series(taskReload, sassTask, cssTask, jsTask, htmlTask, imagesTask));
 }
 
 exports.default = series(
-    parallel(sassTask, cssTask, jsTask, htmlTask, imagesTask),
+    parallel(sassTask, cssTask, jsTask, htmlTask, imagesTask, taskBrowserSync),
     watchTask
 );
