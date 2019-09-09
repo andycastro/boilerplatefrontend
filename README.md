@@ -43,7 +43,7 @@ gulp
 
 ## Which tasks Gulp is running?
 
-All tasks is using gulp version 4.0.2 (series, parallels, etc.)
+All tasks are using gulp version 4.0.2 (series, parallels, etc.)
 
 ```sh
 gulp-sass
